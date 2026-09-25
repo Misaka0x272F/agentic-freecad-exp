@@ -15,9 +15,9 @@ It exits non-zero if any check fails. Both models pass with **zero failures**.
 
 | # | check | why it is not redundant |
 |---|---|---|
-| 1 | every solid is a valid BRep; every bearing passes `check_bearing` | a boolean can return a shape that `isValid()` rejects, and ball-count coincidences make this real (see [lessons E6/B6](06-lessons-learned.md#b6-a-bearing-can-silently-fuse-into-an-invalid-solid)) |
+| 1 | every solid is a valid BRep; every bearing passes `check_bearing` | a boolean can return a shape that `isValid()` rejects, and ball-count coincidences make this real (see [API traps §7](../../../docs/practices/02-freecad-api-traps.md#7-a-bearing-can-silently-fuse-into-an-invalid-solid)) |
 | 2 | gear tip radius, tooth count and face width match module and z | measuring the tip radius about the gear's **own axis** cross-checks `m·z` without counting teeth by eye; the tooth count is then counted independently by clustering the tip-circle vertices |
-| 3 | each gear hub keyway is an actual void at the angle the mating shaft keyway uses | this is the check that catches the silent local-frame/world-frame mistake described in [lessons B1](06-lessons-learned.md#b1-partfeatureshape-already-has-the-placement-applied--and-this-one-is-silent) |
+| 3 | each gear hub keyway is an actual void at the angle the mating shaft keyway uses | this is the check that catches the silent local-frame/world-frame mistake described in [API traps §1](../../../docs/practices/02-freecad-api-traps.md#1-partfeatureshape-already-has-the-placement-applied) |
 | 4 | shaft, bearing-bore and housing-bore axes are coaxial; centre distances exact | measured from cylindrical faces, not bounding boxes (bounding boxes are ~0.1 mm off after booleans) |
 | 5 | no two parts share volume | the decisive test: `distToShape == 0` cannot distinguish "touching" from "overlapping" |
 | 6 | each meshing pair touches **and** does not overlap | proves the phase alignment is right, not merely close |
@@ -94,7 +94,7 @@ systematic error in the builder would have to fool both:
 
 * **Cut volumes.** Every keyway's boolean result is compared against the closed
   form for a rectangular slot in a cylinder
-  ([lessons C6](06-lessons-learned.md#c6-cross-check-every-cut-against-an-exact-analytic-volume)).
+  ([verification §3](../../../docs/practices/03-verification-methodology.md#3-cross-check-every-cut-against-a-closed-form-volume)).
   All twelve keyways across the two models agree to better than 0.1 %.
 * **Housing clearances.** Oil-sump floor to lowest tooth = 6.0 mm,
   gear tip to cavity wall = 12.0 mm, both stated and re-measured.
@@ -104,7 +104,7 @@ systematic error in the builder would have to fool both:
 The first generation of these models — built on the CAD machine over MCP — had
 **defective gear hub keyways**: cut in the local frame against an already-placed
 shape, they removed no material from the bore and instead cut two spurious slots
-into the rim near one face ([lessons B1](06-lessons-learned.md#b1-partfeatureshape-already-has-the-placement-applied--and-this-one-is-silent)).
+into the rim near one face ([API traps §1](../../../docs/practices/02-freecad-api-traps.md#1-partfeatureshape-already-has-the-placement-applied)).
 The models committed here are rebuilt with the fix and fully audited; the
 `Reducer.FCStd` / `Reducer_2stage.FCStd` files in `models/` are the originals for
 comparison.

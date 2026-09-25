@@ -155,7 +155,7 @@ def tooth_spin(z, target_alpha_deg, tooth=True):
 
     ``PartDesign.fcgear`` centres a **tooth on the local +X axis**, i.e.
     ``theta = 0`` for a tooth and ``theta = 180/z`` for a space.  That was
-    measured, not assumed - see docs/06-lessons-learned.md.
+    measured, not assumed - see docs/practices/02-freecad-api-traps.md.
     """
     theta = 0.0 if tooth else 180.0 / z
     return (target_alpha_deg - theta) % 360.0
@@ -252,7 +252,7 @@ def make_shaft(segments, y_axis):
 
     Keep diameter steps **outside** the axial span occupied by an end cap, or a
     through cap's central hole (sized on the smaller diameter) will collide
-    with the larger section - see docs/06-lessons-learned.md.
+    with the larger section - see docs/practices/04-cad-assembly-practice.md.
     """
     return union(cyl(d / 2.0, x0, x1, y_axis) for x0, x1, d in segments)\
         .removeSplitter()

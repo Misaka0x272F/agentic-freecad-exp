@@ -72,7 +72,7 @@ print(xmlrpc.client.ServerProxy('http://<cad-host>:9875', allow_none=True).ping(
 
 If the first succeeds and the second reports *"Remote end closed connection
 without response"*, the client IP is missing from the addon's allowlist — see
-[lessons-learned A2](06-lessons-learned.md#a2-tcp-connects-but-every-xml-rpc-call-is-closed-with-no-response).
+[A2](#a2-tcp-connects-but-every-xml-rpc-call-is-closed-with-no-response).
 
 ## How the work was actually done
 
@@ -92,7 +92,7 @@ A loop that worked well:
 2. **Measure the convention, do not assume it.** The gear generator's tooth
    phase was established by measurement, twice, after the first measurement
    proved unreliable (see
-   [lessons-learned C4](06-lessons-learned.md#c4-measure-gear-phase-at-the-pitch-circle-not-at-the-tip)).
+   [design notes](../../../projects/reducers/docs/05-design-notes.md#establishing-the-generators-convention)).
 3. **Build with parameters at module level** so later calls can reuse them — the
    `execute_code` namespace is persistent within a session.
 4. **Verify numerically in the same breath as building.** Centre distance,
@@ -127,7 +127,30 @@ modelling difference.
 | two-stage total | 16352.6 cm³* | 16336.3 cm³ |
 
 \* the two-stage figure shown is from the pre-fix build; see the note in
-[verification](05-verification.md).
+[verification](../../projects/reducers/docs/04-verification.md).
+
+## Probe the remote environment every session — it is not stable
+
+Two sessions driving the same addon recorded **contradictory** observations about
+what `execute_code` provides. The difference matters, so it is recorded rather
+than resolved:
+
+| observation | session A | session B |
+|---|---|---|
+| `import Gui` | `ModuleNotFoundError` — no `PartDesign_*` GUI commands | not attempted |
+| `App.Vector` | `AttributeError`; had to use `FreeCAD.Vector` | `App.Vector` used throughout |
+| `obj.ViewObject` | accessible; colours could be set remotely | not attempted |
+| script namespace across calls | **not** preserved | preserved (and the addon documents persistence) |
+
+So: **probe at the start of each session** instead of trusting this table or the
+documentation, and never let correctness depend on interpreter state surviving
+between calls. If values must persist, write them to a module file and import it,
+or attach results to document objects. That is what session A did, and it is the
+robust choice regardless of which behaviour you get.
+
+A related trap: `execute_code_headless` runs on the **agent** machine, not the CAD
+machine (see [A3](#a3-execute_code_headless-does-not-run-on-the-remote-host)), so
+"it worked last time" is not transferable between the two paths.
 
 ## Privacy note
 

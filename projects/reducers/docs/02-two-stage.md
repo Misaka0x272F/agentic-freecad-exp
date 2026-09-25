@@ -77,7 +77,7 @@ Shaft diameter steps are placed **outside** the cap spans `|x| ∈ [106, 124]`, 
 that a through cap's central bore — sized on the smaller diameter — cannot
 collide with a larger section. This is a direct consequence of a bug found and
 fixed during the build; see
-[lessons-learned D4](06-lessons-learned.md#d4-clearances-the-housing-must-respect).
+[design notes §4](05-design-notes.md#4-clearances).
 
 ## Shafts
 
@@ -130,4 +130,4 @@ in pairs beside each bearing boss, 4 foundation bolts.
 intersection volumes zero, both centre distances exact to 10⁻⁶ mm, both meshes
 touching without overlap.
 
-See [verification](05-verification.md) for the full audit output.
+See [verification](04-verification.md) for the full audit output.

@@ -122,4 +122,4 @@ Bolting: 4 × M8 per end cap, 12 split-flange bolts, 4 foundation bolts.
 pairwise intersection volume zero, centre distance exactly 160.000000 mm, and
 both meshes touching without overlap.
 
-See [verification](05-verification.md) for the full audit output.
+See [verification](04-verification.md) for the full audit output.

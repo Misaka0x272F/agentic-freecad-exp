@@ -128,7 +128,7 @@ da₂/2 + d_III(轴颈)/2 + Δ  <  a₂
 
 动手前先用**布尔干涉量**验证啮合相位公式：正确相位下 `common()` 体积 = 0，
 把从动轮再转过半个齿距则得到 ~1900 mm³ 干涉——先确认这个判据有区分度，再拿它
-当尺子用（见 lessons-learned 4.4）。
+当尺子用（见 [verification methodology §5](../../../docs/practices/03-verification-methodology.md#5-prove-the-check-has-discriminating-power)）。
 
 然后建 6 齿轮 + 4 轴 + 3 键，45 对零件干涉全为 0。
 
@@ -152,7 +152,7 @@ da₂/2 + d_III(轴颈)/2 + Δ  <  a₂
 
 期间还出现过一次**误判为卡死**：最后那条全量校验（41 件 820 对）跑了 2 分钟
 多，用户以为 FreeCAD 挂了。`get_rpc_status` 报 `state: busy` 才确认是在跑。
-之后改成包围盒预筛，820 → 201 对，秒级完成（见 lessons-learned 4.3、5.3）。
+之后改成包围盒预筛，820 → 201 对，秒级完成（见 [§2](../../../docs/practices/03-verification-methodology.md#2-pre-filter-large-pairwise-sweeps-with-bounding-boxes) 与 [§9](../../../docs/practices/03-verification-methodology.md#9-distinguish-still-running-from-hung)）。
 
 ### 3.3 第三轮：透明
 
@@ -264,7 +264,7 @@ da₂/2 + d_III(轴颈)/2 + Δ  <  a₂
 
 ## 8. 经验教训
 
-完整的坑清单在 [`docs/06-lessons-learned.md`](06-lessons-learned.md)，其中带 `[3rd]`
+完整的坑清单在 [`docs/practices/`](../../../docs/practices/)，其中带 `[3rd]`
 标记的条目来自本次会话。最值得记住的三条：
 
 1. **先并后挖**：箱体类零件的凸缘是实体板，必须并完所有凸台再切内腔。
